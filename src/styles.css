@@ -209,3 +209,32 @@
  .mobile-nav-drawer .drawer-foot button{display:flex;align-items:center;gap:7px;border:0;background:transparent;color:#006b40;padding:0;font-size:11px;font-weight:700}
 }
 @media(prefers-reduced-motion:reduce){.mobile-nav-drawer{transition:none}}
+
+
+/* Featured offers — unified visual language */
+.offers-title-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:8px}
+.offers-title-row h2{margin:0;letter-spacing:-.8px}
+.offers-badge{display:inline-flex;align-items:center;border:1px solid #f5cbc8;background:#fff2f0;color:#b8342e;font-weight:800;font-size:10px;letter-spacing:.01em;border-radius:100px;padding:7px 10px;white-space:nowrap}
+.home-offers-grid .product-card{border:1px solid #eaf0eb;border-radius:16px;box-shadow:0 5px 16px rgba(8,45,28,.04)}
+.home-offers-grid .product-media{padding:12px 12px 0}
+.home-offers-grid .product-image{background:#f8faf8!important;border-radius:11px;height:170px}
+.home-offers-grid .product-photo{background:transparent!important;object-fit:contain;padding:14px;mix-blend-mode:normal}
+.home-offers-grid .product-discount{background:#fff5f3;color:#b83d34;border:1px solid #f3d6d0;box-shadow:none;font-size:10px;top:18px;left:18px;padding:5px 7px}
+.home-offers-grid .product-info{padding:13px 14px 15px;min-height:155px}
+.home-offers-grid .product-unit-label{font-size:10px;color:#8b9c91}
+.home-offers-grid .product-name{font-size:13px;color:#173a2b}
+.home-offers-grid .current-price{font-size:20px;color:#007d48}
+.home-offers-grid .add-circle{background:#008f4d;border-radius:50%;width:38px;height:38px;box-shadow:none}
+@media(max-width:760px){
+ .offers-title-row{display:flex;align-items:center;gap:7px;margin-top:7px}
+ .offers-title-row h2{font-size:21px;line-height:1.18}
+ .offers-badge{font-size:9px;padding:5px 8px}
+ .home-offers-grid .product-media{padding:9px 9px 0}
+ .home-offers-grid .product-image{height:137px;border-radius:10px}
+ .home-offers-grid .product-photo{padding:10px}
+ .home-offers-grid .product-discount{top:14px;left:14px;font-size:9px;padding:4px 6px}
+ .home-offers-grid .product-info{padding:10px 11px 13px;min-height:144px}
+ .home-offers-grid .product-name{font-size:12px}
+ .home-offers-grid .current-price{font-size:18px}
+ .home-offers-grid .add-circle{width:36px;height:36px}
+}
