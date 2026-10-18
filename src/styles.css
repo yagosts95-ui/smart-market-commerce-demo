@@ -132,3 +132,17 @@
  .feature-banner{aspect-ratio:auto}
  .banner-bottom{margin-top:27px}
 }
+
+
+/* Homepage refinement: reassurance belongs near the footer, not below hero */
+.perks{margin-top:28px;margin-bottom:0;border-radius:14px;box-shadow:0 5px 18px rgba(7,55,34,.04);background:#fff}
+.hero-visual+.section{padding-top:38px}
+@media(max-width:760px){
+ .perks{margin-top:24px;margin-bottom:0;padding-top:11px;padding-bottom:11px;border-radius:12px;gap:0;min-height:unset}
+ .perks>div{min-width:205px;font-size:10px}
+ .perks>div svg{width:24px;height:24px}
+ .hero-visual+.section{padding-top:23px}
+ .categories-scroll{padding-bottom:0}
+ .section-head{margin-bottom:15px}
+ .category-card{padding-bottom:1px}
+}
