@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "vite build",
-    "preview": "vite preview --host 0.0.0.0"
+    "preview": "vite preview --host 0.0.0.0",
+    "prebuild": "node scripts/optimize-assets.mjs"
   },
   "dependencies": {
     "react": "^18.3.1",
@@ -14,6 +15,7 @@
     "lucide-react": "^0.468.0"
   },
   "devDependencies": {
-    "vite": "^6.0.5"
+    "vite": "^6.0.5",
+    "sharp": "^0.33.5"
   }
 }
