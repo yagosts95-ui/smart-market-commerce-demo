@@ -146,3 +146,38 @@
  .section-head{margin-bottom:15px}
  .category-card{padding-bottom:1px}
 }
+
+
+/* Product vitrines v2: responsive and consistent commercial cards */
+.product-card{display:flex;flex-direction:column;min-width:0;background:#fff;border:1px solid #e5ede7;border-radius:18px;overflow:hidden;box-shadow:0 5px 18px rgba(9,48,30,.04);transition:box-shadow .2s,transform .2s}
+.product-card:hover{box-shadow:0 12px 29px rgba(9,48,30,.1);transform:translateY(-2px)}
+.product-media{position:relative;padding:11px 11px 0;background:#fff}
+.product-image{width:100%;height:165px;display:grid;place-items:center;border:0;border-radius:12px;background:#f8faf8!important;overflow:hidden}
+.product-photo{width:100%;height:100%;object-fit:contain;object-position:center;padding:8px;background:transparent!important;mix-blend-mode:multiply}
+.product-discount{position:absolute;top:17px;left:17px;border-radius:7px;background:#e63935;color:#fff;font-size:11px;font-weight:800;padding:6px 8px;box-shadow:0 3px 10px #ca2c2922}
+.product-info{display:flex;flex-direction:column;flex:1;min-height:160px;padding:13px 14px 14px;gap:4px}
+.product-unit-label{font-size:10px;font-weight:700;color:#769488}
+.product-name{font-size:13px;font-weight:750;line-height:1.4;color:#18382b;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden;min-height:36px;margin:0}
+.product-card .unit{margin:0;font-size:11px;color:#83938a}
+.product-purchase{display:flex;align-items:flex-end;justify-content:space-between;gap:5px;margin-top:auto;padding-top:12px}
+.price-copy{display:flex;flex-direction:column;min-width:0;gap:5px}
+.product-card .old-price{font-size:10px;line-height:1;text-decoration:line-through;color:#9aa59e;margin:0}
+.current-price{color:#008f4d;font-size:20px;font-weight:800;line-height:1.15;letter-spacing:-.65px;white-space:nowrap}
+.product-card .add-circle{width:39px;height:39px;border-radius:12px;background:#008f4d;flex-shrink:0;box-shadow:0 4px 9px #008f4d1c}
+.product-card .add-circle:active{transform:scale(.94)}
+@media(max-width:760px){
+ .products-grid{gap:10px}
+ .product-card{border-radius:15px}
+ .product-media{padding:8px 8px 0}
+ .product-image{height:133px;border-radius:10px}
+ .product-photo{padding:6px}
+ .product-discount{top:12px;left:12px;font-size:10px;padding:5px 6px}
+ .product-info{padding:10px 11px 12px;min-height:153px;gap:3px}
+ .product-name{font-size:12px;line-height:1.35;min-height:33px}
+ .product-purchase{padding-top:9px}
+ .current-price{font-size:17px;letter-spacing:-.5px}
+ .product-card .old-price{font-size:9px}
+ .product-card .add-circle{width:37px;height:37px;min-width:37px;border-radius:11px}
+}
+@media(max-width:360px){.current-price{font-size:15px}.product-card .add-circle{width:34px;height:34px;min-width:34px}.product-image{height:118px}}
+@media(prefers-reduced-motion:reduce){.product-card{transition:none}}
