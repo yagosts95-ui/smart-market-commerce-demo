@@ -238,3 +238,37 @@
  .home-offers-grid .current-price{font-size:18px}
  .home-offers-grid .add-circle{width:36px;height:36px}
 }
+
+
+/* Administrative navigation: isolated route and responsive drawer */
+.manager-overlay{display:none}
+.manager-side-brand{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.manager-close{display:none;border:0;background:#ffffff1a;color:#fff;border-radius:9px;padding:8px}
+.manager-side-foot{flex-wrap:wrap}
+.manager-side-foot small{display:block;width:100%;padding-left:28px;color:#9ebead;font-size:10px}
+.manager-disclaimer{font-size:11px;color:#7b8d82;margin:23px 0 0;text-align:right}
+.manager-mode .manager-logo .brand-image{width:170px;max-height:70px}
+.manager-mode .manager-top{position:sticky;top:0;z-index:20}
+.manager-mode .manager-body{min-width:0}
+.manager-mode .table-wrap{width:100%;-webkit-overflow-scrolling:touch}
+@media(max-width:760px){
+ .manager-overlay{display:block;position:fixed;inset:0;border:0;background:rgba(4,25,18,.48);z-index:79}
+ .manager-mode .manager-side{display:flex;position:fixed;top:0;left:0;bottom:0;height:100dvh;min-height:0;width:min(290px,82vw);max-width:82vw;z-index:80;transform:translateX(-105%);transition:transform .22s ease;box-shadow:12px 0 35px rgba(0,0,0,.18);overflow-y:auto}
+ .manager-mode .manager-side.expanded{top:0;left:0;bottom:0;width:min(290px,82vw);height:100dvh;min-height:0;transform:translateX(0);z-index:80}
+ .manager-close{display:grid;place-items:center}
+ .manager-mode .manager-logo{padding:20px 16px 23px}
+ .manager-mode .manager-logo .brand-image{width:170px;max-height:66px}
+ .manager-mode .manager-menu{padding:16px 10px}
+ .manager-mode .manager-menu button{padding:13px;font-size:12px}
+ .manager-mode .manager-top{padding:14px 16px;gap:10px}
+ .manager-mode .manager-top>div{flex:1;min-width:0}
+ .manager-mode .manager-top h2{font-size:15px}
+ .manager-mode .manager-body{padding:18px 14px}
+ .manager-mode .manager-welcome h1{font-size:21px}
+ .manager-mode .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .manager-mode .stat{min-width:0}
+ .manager-mode .stat strong{font-size:18px;overflow-wrap:anywhere}
+ .manager-mode .orders-panel{padding:15px 11px}
+ .manager-disclaimer{text-align:left;font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){.manager-mode .manager-side{transition:none}}
