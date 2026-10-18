@@ -181,3 +181,31 @@
 }
 @media(max-width:360px){.current-price{font-size:15px}.product-card .add-circle{width:34px;height:34px;min-width:34px}.product-image{height:118px}}
 @media(prefers-reduced-motion:reduce){.product-card{transition:none}}
+
+
+/* Premium mobile navigation drawer */
+.drawer-backdrop{display:none}
+.load-more{display:flex;align-items:center;flex-direction:column;gap:9px;margin:25px 0 12px;color:#71857a;font-size:12px}
+.load-more p{margin:0}
+@media(max-width:760px){
+ .drawer-backdrop{display:block;position:fixed;inset:0;background:rgba(7,31,22,.53);border:0;z-index:72;backdrop-filter:blur(3px)}
+ .mobile-nav-drawer,.mobile-nav-drawer.open{position:fixed;top:0;bottom:0;left:0;z-index:73;display:flex;flex-direction:column;width:min(325px,88vw);max-height:100dvh;overflow-y:auto;padding:0;background:#fff;box-shadow:15px 0 60px rgba(1,33,19,.22);border-radius:0 20px 20px 0;transform:translateX(-105%);transition:transform .24s ease;gap:0}
+ .mobile-nav-drawer.open{transform:translateX(0)}
+ .drawer-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:26px 22px 18px;background:#fff;border-bottom:1px solid #edf2ee}
+ .drawer-head button{width:37px;height:37px;display:grid;place-items:center;background:#f1f6f3;border:0;border-radius:50%;color:#12563b}
+ .drawer-intro{padding:20px 22px;background:linear-gradient(125deg,#005839,#008f4d);color:#fff;display:flex;flex-direction:column;gap:5px}
+ .drawer-intro strong{font:800 17px Montserrat,sans-serif}
+ .drawer-intro span{font-size:11px;color:#d9f5e2}
+ .drawer-label{font-size:10px;letter-spacing:.12em;color:#7f9588;font-weight:800;padding:22px 22px 7px}
+ .mobile-nav-drawer .drawer-links{display:flex;flex-direction:column;padding:0 11px}
+ .mobile-nav-drawer .drawer-links button{display:flex;align-items:center;gap:13px;border:0;background:transparent;padding:13px 12px;border-radius:10px;text-align:left;font-size:13px;font-weight:750;color:#183b2b;min-height:50px}
+ .drawer-links button:hover{background:#eff9f2}
+ .drawer-links button>svg:first-child{color:#008f4d;flex-shrink:0}
+ .drawer-links button>svg:last-child{margin-left:auto;color:#97aa9e}
+ .drawer-quick{display:flex;gap:8px;flex-wrap:wrap;padding:8px 18px 18px}
+ .mobile-nav-drawer .drawer-quick button{border:1px solid #d9e9df;border-radius:999px;background:#f7fbf8;color:#14603c;padding:9px 11px;font-size:11px;font-weight:700}
+ .drawer-foot{margin-top:auto;padding:18px 22px 28px;border-top:1px solid #edf2ee;display:flex;flex-direction:column;gap:12px}
+ .drawer-foot>span{font-size:10px;color:#91a097}
+ .mobile-nav-drawer .drawer-foot button{display:flex;align-items:center;gap:7px;border:0;background:transparent;color:#006b40;padding:0;font-size:11px;font-weight:700}
+}
+@media(prefers-reduced-motion:reduce){.mobile-nav-drawer{transition:none}}
