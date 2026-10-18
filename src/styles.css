@@ -355,3 +355,15 @@
  .customer-tracking{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:17px}
  .tracking-stage{font-size:9px}
 }
+
+
+/* Feature offers banner: keep full artwork visible at all desktop widths */
+.feature-banner-wrap{margin-top:36px}
+.feature-banner{width:100%;height:auto;aspect-ratio:auto;overflow:hidden;border-radius:16px}
+.feature-banner picture{display:block;width:100%}
+.feature-banner img{display:block;width:100%;height:auto!important;max-height:none!important;aspect-ratio:auto!important;object-fit:contain!important;object-position:center!important}
+@media(max-width:760px){
+ .feature-banner-wrap{margin-top:22px}
+ .feature-banner{border-radius:12px}
+ .feature-banner img{width:100%;height:auto!important;max-height:none!important;object-fit:contain!important}
+}
