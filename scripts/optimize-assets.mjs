@@ -1,5 +1,5 @@
 import sharp from 'sharp';
-import { mkdir, stat } from 'node:fs/promises';
+import { mkdir, stat, unlink } from 'node:fs/promises';
 import { join } from 'node:path';
 
 const from='public/assets/mais-voce';
@@ -33,3 +33,11 @@ await Promise.all([
  optimize('banner-cta-compras2.png','cta.webp',{width:1200,quality:76}),
  ...categories.map(c=>optimize('categoria-'+c+'.png','categoria-'+c+'.webp',{category:true,quality:76}))
 ]);
+
+// Remove large PNG sources from this build's public directory only.
+// Source originals remain versioned in GitHub.
+if(!process.exitCode){
+ const originals=['logo-mais-voce-online-small.png','banner-cta-compras.png','banner-cta-compras2.png','banner-hero-home-mobile.png','banner-ofertas-semana.png',...categories.map(c=>'categoria-'+c+'.png')];
+ await Promise.all(originals.map(name=>unlink(join(from,name))));
+ console.log('Removed PNG originals from deploy output; originals remain in Git.');
+}
