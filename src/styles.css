@@ -316,3 +316,42 @@
  .print-sheet p{padding:7px 0;border-bottom:1px dashed #ccc}
  @page{margin:15mm}
 }
+
+
+/* Operational workflow columns */
+.orders-board{margin-top:25px}
+.kanban-track{display:flex;gap:14px;overflow-x:auto;padding:4px 0 18px;scroll-snap-type:x proximity}
+.kanban-column{flex:0 0 290px;background:#f0f5f2;border:1px solid #e0eae3;border-radius:15px;padding:11px;min-height:260px;scroll-snap-align:start}
+.kanban-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:13px;padding:6px}
+.kanban-head>div{display:flex;flex-direction:column;gap:5px}
+.kanban-head strong{color:#16412d;font-size:13px}
+.kanban-head span{color:#82978a;font-size:10px}
+.kanban-head b{background:#fff;border-radius:30px;min-width:25px;padding:6px;text-align:center;color:#007e48;font-size:11px}
+.kanban-items{display:flex;flex-direction:column;gap:10px}
+.kanban-card{background:#fff;border:1px solid #e1eae4;padding:14px;border-radius:12px;display:flex;flex-direction:column;gap:9px;box-shadow:0 3px 10px #12371e09}
+.kanban-id{font-size:10px;font-weight:800;color:#008a4f}
+.kanban-customer{font-size:13px;color:#153e2b}
+.kanban-meta{color:#647c6c;font-size:11px}
+.kanban-payment{background:#fff6e6;color:#8b6328;padding:8px;border-radius:8px;font-size:10px}
+.kanban-details summary{cursor:pointer;color:#236443;font-size:11px;font-weight:800;padding:7px 0}
+.kanban-line{display:flex;justify-content:space-between;gap:7px;border-top:1px solid #eef1ed;padding:7px 0;font-size:10px}
+.kanban-actions{display:flex;flex-direction:column;gap:7px;margin-top:3px}
+.kanban-actions button{display:flex;align-items:center;justify-content:center;gap:6px;padding:11px;border-radius:9px;border:1px solid #d7e6dd;font-weight:800;font-size:11px}
+.kanban-print{background:white;color:#006b3f}
+.kanban-next{background:#008f4d;color:white}
+.customer-orders-list{display:grid;gap:15px;margin-top:20px}
+.customer-order-card{padding:21px;background:#fff;border:1px solid #e0ebe5;border-radius:15px}
+.customer-order-card .order-title{margin-bottom:23px}
+.customer-order-card summary{color:#007a45;font-size:12px;font-weight:800;cursor:pointer;margin-top:16px}
+.customer-tracking{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px}
+.tracking-stage{position:relative;display:flex;flex-direction:column;align-items:center;gap:9px;text-align:center;color:#9aa99e;font-size:10px;line-height:1.35}
+.tracking-dot{width:18px;height:18px;background:#edf1ed;border:3px solid #d9e4dc;border-radius:50%}
+.tracking-stage.completed{color:#086f42;font-weight:700}
+.tracking-stage.completed .tracking-dot{border-color:#008f4d;background:#a1eac0}
+@media(max-width:760px){
+ .orders-board{margin-top:16px}
+ .kanban-column{flex-basis:min(82vw,310px);min-height:230px}
+ .customer-order-card{padding:15px}
+ .customer-tracking{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:17px}
+ .tracking-stage{font-size:9px}
+}
