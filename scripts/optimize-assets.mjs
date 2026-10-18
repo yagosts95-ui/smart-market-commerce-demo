@@ -29,7 +29,8 @@ await Promise.all([
  optimize('logo-mais-voce-online-small.png','logo.webp',{width:520,quality:81}),
  optimize('banner-cta-compras.png','hero-desktop.webp',{width:1500,quality:78}),
  optimize('banner-hero-home-mobile.png','hero-mobile.webp',{width:800,quality:76}),
- optimize('banner-ofertas-semana.png','ofertas.webp',{width:1200,quality:76}),
+ optimize('banner-ofertas-semana.png','ofertas.webp',{width:1000,quality:75}),
+ optimize('banner-ofertas-desktop.png','ofertas-desktop.webp',{width:1600,quality:80}),
  optimize('banner-cta-compras2.png','cta.webp',{width:1200,quality:76}),
  ...categories.map(c=>optimize('categoria-'+c+'.png','categoria-'+c+'.webp',{category:true,quality:76}))
 ]);
@@ -37,7 +38,7 @@ await Promise.all([
 // Remove large PNG sources from this build's public directory only.
 // Source originals remain versioned in GitHub.
 if(!process.exitCode){
- const originals=['logo-mais-voce-online-small.png','banner-cta-compras.png','banner-cta-compras2.png','banner-hero-home-mobile.png','banner-ofertas-semana.png',...categories.map(c=>'categoria-'+c+'.png')];
+ const originals=['logo-mais-voce-online-small.png','banner-cta-compras.png','banner-cta-compras2.png','banner-hero-home-mobile.png','banner-ofertas-semana.png','banner-ofertas-desktop.png',...categories.map(c=>'categoria-'+c+'.png')];
  await Promise.all(originals.map(name=>unlink(join(from,name))));
  console.log('Removed PNG originals from deploy output; originals remain in Git.');
 }
