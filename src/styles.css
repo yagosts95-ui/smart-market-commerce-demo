@@ -272,3 +272,16 @@
  .manager-disclaimer{text-align:left;font-size:10px}
 }
 @media(prefers-reduced-motion:reduce){.manager-mode .manager-side{transition:none}}
+
+
+/* Shared-order presentation */
+.checkout-label{display:flex;flex-direction:column;gap:8px;font-size:12px;font-weight:700;color:#395e49;margin:18px 0}
+.checkout-input{border:1px solid #d7e6dc;border-radius:10px;background:#fff;padding:11px 12px;color:#173a2b;outline-color:#008f4d;width:100%}
+.manager-products{padding:24px;background:#fff;border:1px solid #e5eee8;border-radius:16px;margin-top:22px}
+.manager-products h2{font-family:Montserrat,sans-serif;color:#153a2a;font-size:22px}
+.manager-products p{color:#77897e;font-size:13px}
+.manager-products-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:20px}
+.manager-product-row{border:1px solid #e4eee7;border-radius:10px;padding:12px;display:flex;align-items:center;justify-content:space-between;gap:9px;flex-wrap:wrap;font-size:12px}
+.manager-product-row strong{color:#1a4030}
+.manager-product-row span{color:#778d7f}
+@media(max-width:760px){.manager-products{padding:17px 12px}.manager-products-list{grid-template-columns:1fr}.manager-product-row{gap:6px}}
