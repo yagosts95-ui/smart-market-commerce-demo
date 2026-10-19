@@ -1,0 +1,25 @@
+{
+  "id": "/app-cliente",
+  "name": "Mais Você — Cliente",
+  "short_name": "Mais Você",
+  "description": "Catálogo e pedidos demonstrativos do Mais Você Online",
+  "start_url": "/?app=cliente",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#008f4d",
+  "icons": [
+    {
+      "src": "/assets/mais-voce/optimized/logo.webp",
+      "sizes": "192x192",
+      "type": "image/webp",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/mais-voce/optimized/logo.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "any"
+    }
+  ]
+}
