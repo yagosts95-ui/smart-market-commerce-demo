@@ -36,6 +36,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin main
           git add public/cliente-192.png public/cliente-512.png public/cliente-apple.png public/gestor-192.png public/gestor-512.png public/gestor-apple.png
           if ! git diff --cached --quiet; then
             git commit -m "build: generate installable PWA icon sizes"
