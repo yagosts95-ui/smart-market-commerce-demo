@@ -92,10 +92,10 @@ export async function notifyManagerAboutDemoOrder(id){
  return r.json();
 }
 
-export async function createPagBankSandboxCheckout(orderId){
+export async function createPagBankSandboxCheckout(orderId,method='PIX'){
  const numericId=-Number(orderId);
  if(!Number.isSafeInteger(numericId)||numericId<1)throw Error('Pedido compartilhado inválido');
- const response=await fetch(url+'/functions/v1/pagbank-sandbox-checkout',{method:'POST',headers,body:JSON.stringify({order_id:numericId})});
+ const response=await fetch(url+'/functions/v1/pagbank-sandbox-checkout',{method:'POST',headers,body:JSON.stringify({order_id:numericId,method})});
  const data=await response.json().catch(()=>({}));
  if(!response.ok)throw Error(data.error||'Checkout Sandbox indisponível');
  if(!data.payment_url?.startsWith('https://'))throw Error('Link de pagamento inválido');
