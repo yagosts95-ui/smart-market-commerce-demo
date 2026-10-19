@@ -6,7 +6,9 @@ export async function fetchSharedDemoOrders(){
  const r=await fetch(url+'/rest/v1/demo_orders?select=id,created_at,status,lines,items,total&order=created_at.desc&limit=60',{headers});
  if(!r.ok)throw new Error('Não foi possível atualizar os pedidos compartilhados');
  const rows=await r.json();
- return rows.map(x=>({...x,id:-x.id,customer:'Cliente demonstração',paymentStatus:'Não verificado (teste)',demo:true,shared:true,phone:null,address:null}));
+ const p=await fetch(url+'/rest/v1/demo_payment_status?select=order_id,method,status&limit=200',{headers}).then(res=>res.ok?res.json():[]).catch(()=>[]);
+ const byId=new Map(p.map(x=>[Number(x.order_id),x]));
+ return rows.map(x=>{const payment=byId.get(Number(x.id));return {...x,id:-x.id,customer:'Cliente demonstração',paymentStatus:payment?.status==='PAID'?'Pago · PagBank Sandbox':payment?.status==='DECLINED'?'Pagamento recusado':payment?.status==='EXPIRED'?'Pagamento expirado':payment?'Pagamento pendente · '+(payment.method==='PIX'?'Pix':'Cartão'):'Pagamento não iniciado',demo:true,shared:true,phone:null,address:null}});
 }
 export async function submitSharedDemoOrder(items){
  const payload=items.map(p=>({id:p.id,qty:p.qty}));
@@ -100,4 +102,21 @@ export async function createPagBankSandboxCheckout(orderId,method='PIX'){
  if(!response.ok)throw Error(data.error||'Checkout Sandbox indisponível');
  if(!data.payment_url?.startsWith('https://'))throw Error('Link de pagamento inválido');
  return data.payment_url;
+}
+
+export async function createSandboxPayment(orderId,method,customer){
+ const id=-Number(orderId);
+ if(!Number.isSafeInteger(id)||id<1)throw Error('Pedido inválido');
+ const response=await fetch(url+'/functions/v1/pagbank-sandbox-payment',{method:'POST',headers,body:JSON.stringify({action:'create',order_id:id,method,customer})});
+ const data=await response.json().catch(()=>({}));
+ if(!response.ok)throw Error(data.error+(data.code?' ('+data.code+')':'')||'Pagamento indisponível');
+ return data;
+}
+export async function checkSandboxPayment(orderId){
+ const id=-Number(orderId);
+ if(!Number.isSafeInteger(id)||id<1)throw Error('Pedido inválido');
+ const response=await fetch(url+'/functions/v1/pagbank-sandbox-payment',{method:'POST',headers,body:JSON.stringify({action:'status',order_id:id})});
+ const data=await response.json().catch(()=>({}));
+ if(!response.ok)throw Error(data.error||'Consulta de pagamento indisponível');
+ return data;
 }
