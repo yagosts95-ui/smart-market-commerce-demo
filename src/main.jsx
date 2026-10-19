@@ -142,7 +142,15 @@ const sendOrder=async()=>{
   setMySharedDemoIds(previous=>{const next=[orderId,...previous].slice(0,30);localStorage.setItem('maisvoce-my-shared-demo-ids',JSON.stringify(next));return next});
   setLastOrderId(orderId);
   const customer={name:clientName,phone:delivery.phone,email:clientEmail,tax_id:payerCpf.replace(/\D/g,''),fulfillment,address:fulfillment==='delivery'?delivery:{}};
-  const pay=await createSandboxPayment(orderId,paymentMethod,customer);
+  let pay;
+  try{pay=await createSandboxPayment(orderId,paymentMethod,customer)}
+  catch(err){
+    if(/Pedido expirado ou indisponível/i.test(String(err?.message||''))){
+      setPendingSandboxOrder(null);
+      throw new Error('A tentativa anterior expirou. Revise os itens e toque novamente em Enviar pedido; criaremos uma nova solicitação.');
+    }
+    throw err;
+  }
   if(pay.status==='PAID'){setCart({});setOrderSent(true);setPage('pedidos')}
   else if(paymentMethod==='PIX'&&pay.pix_text){setPixPayment({orderId,...pay});setCheckoutStep(4)}
   else if(paymentMethod==='CREDIT_CARD'&&pay.payment_url)window.location.assign(pay.payment_url);
