@@ -10,25 +10,26 @@
   "theme_color": "#064b31",
   "icons": [
     {
-      "src": "/gestor-192.png?v=4",
+      "src": "/gestor-192.png?v=5",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/gestor-512.png?v=4",
+      "src": "/gestor-512.png?v=5",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/gestor-icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any"
+      "src": "/gestor-maskable.png?v=5",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
   "display_override": [
     "standalone"
-  ]
+  ],
+  "prefer_related_applications": false
 }
