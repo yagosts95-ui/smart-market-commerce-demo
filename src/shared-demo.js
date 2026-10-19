@@ -70,3 +70,24 @@ export async function saveDemoOverride(p){
  if(!r.ok)throw new Error('Falha ao salvar configuração compartilhada');
  return r.json();
 }
+
+const vapidPublic='BP5K2f7hcZFjCWVLApBwhzuCWoCN6uoO022NWQ0cLf9XdHtNAM1vBpFCQ70DbiRxEAB4yYu616sM1segjwu2P9A';
+function decodeBase64Url(value){const padded=(value+'='.repeat((4-value.length%4)%4)).replace(/-/g,'+').replace(/_/g,'/');return Uint8Array.from(atob(padded),c=>c.charCodeAt(0))}
+export async function subscribeManagerToPush(){
+ if(!('serviceWorker' in navigator)||!('PushManager' in window)||!('Notification' in window))throw Error('Push indisponível neste navegador');
+ const permission=await Notification.requestPermission();
+ if(permission!=='granted')throw Error('Permissão de notificação não concedida');
+ const registration=await navigator.serviceWorker.register('/demo-push-sw.js');
+ const ready=await navigator.serviceWorker.ready;
+ const subscription=await ready.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:decodeBase64Url(vapidPublic)});
+ const r=await fetch(url+'/rest/v1/rpc/register_demo_push',{method:'POST',headers,body:JSON.stringify({p_subscription:subscription.toJSON()})});
+ if(!r.ok)throw Error('Não foi possível inscrever o dispositivo');
+ return true;
+}
+export async function notifyManagerAboutDemoOrder(id){
+ const orderId=-id;
+ if(!Number.isSafeInteger(orderId)||orderId<=0)return;
+ const r=await fetch(url+'/functions/v1/demo-order-push',{method:'POST',headers,body:JSON.stringify({order_id:orderId})});
+ if(!r.ok)throw Error('Falha no disparo de push');
+ return r.json();
+}
