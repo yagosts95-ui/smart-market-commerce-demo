@@ -59,3 +59,14 @@ export async function stopDemoFlashOffer(productId){
  if(!r.ok)throw new Error('Falha ao encerrar oferta');
  return r.json();
 }
+
+export async function fetchDemoOverrides(){
+ const r=await fetch(url+'/rest/v1/demo_catalog_overrides?select=product_id,price,online_limit,image_url,visible&limit=200',{headers});
+ if(!r.ok)throw new Error('Falha ao consultar configurações do catálogo');
+ return Object.fromEntries((await r.json()).map(p=>[p.product_id,p]));
+}
+export async function saveDemoOverride(p){
+ const r=await fetch(url+'/rest/v1/rpc/set_demo_catalog_override',{method:'POST',headers,body:JSON.stringify({p_id:p.id,p_price:p.price,p_limit:p.limit,p_image:p.image||null,p_visible:p.visible})});
+ if(!r.ok)throw new Error('Falha ao salvar configuração compartilhada');
+ return r.json();
+}
