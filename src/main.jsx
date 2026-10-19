@@ -137,20 +137,23 @@ const sendOrder=async()=>{
  if(cartItems.some(p=>p.qty>(sharedStock?.[p.id]??999))){setCheckoutError('Estoque insuficiente. Revise o carrinho.');return}
  setCheckoutError('');setCheckoutBusy(true);
  try {
-  const orderId=pendingSandboxOrder??await submitSharedDemoOrder(cartItems);
-  setPendingSandboxOrder(orderId);
-  setMySharedDemoIds(previous=>{const next=[orderId,...previous].slice(0,30);localStorage.setItem('maisvoce-my-shared-demo-ids',JSON.stringify(next));return next});
-  setLastOrderId(orderId);
   const customer={name:clientName,phone:delivery.phone,email:clientEmail,tax_id:payerCpf.replace(/\D/g,''),fulfillment,address:fulfillment==='delivery'?delivery:{}};
+  let orderId=pendingSandboxOrder;
   let pay;
-  try{pay=await createSandboxPayment(orderId,paymentMethod,customer)}
-  catch(err){
-    if(/Pedido expirado ou indisponível/i.test(String(err?.message||''))){
-      setPendingSandboxOrder(null);
-      throw new Error('A tentativa anterior expirou. Revise os itens e toque novamente em Enviar pedido; criaremos uma nova solicitação.');
+  for(let attempt=0;attempt<2;attempt++){
+    if(!orderId)orderId=await submitSharedDemoOrder(cartItems);
+    setPendingSandboxOrder(orderId);
+    setMySharedDemoIds(previous=>{const next=[orderId,...previous].slice(0,30);localStorage.setItem('maisvoce-my-shared-demo-ids',JSON.stringify(next));return next});
+    setLastOrderId(orderId);
+    try{pay=await createSandboxPayment(orderId,paymentMethod,customer);break}
+    catch(err){
+      if(attempt===0&&/Pedido expirado|Pedido anterior não está mais disponível|ORDER_EXPIRED/i.test(String(err?.message||''))){
+        orderId=null;setPendingSandboxOrder(null);continue;
+      }
+      throw err;
     }
-    throw err;
   }
+  if(!pay)throw Error('Não foi possível criar o pagamento');
   if(pay.status==='PAID'){setCart({});setOrderSent(true);setPage('pedidos')}
   else if(paymentMethod==='PIX'&&pay.pix_text){setPixPayment({orderId,...pay});setCheckoutStep(4)}
   else if(paymentMethod==='CREDIT_CARD'&&pay.payment_url)window.location.assign(pay.payment_url);
