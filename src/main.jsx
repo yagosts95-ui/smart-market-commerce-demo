@@ -65,7 +65,7 @@ const count=cartItems.reduce((s,p)=>s+p.qty,0);
 const subtotal=cartItems.reduce((s,p)=>s+p.price*p.qty,0);
 const filtered=products.filter(p=>(category==='Todos'||p.cat===category)&&p.name.toLowerCase().includes(query.toLowerCase()));
 const statusNext={'Novo':'Aceito','Aceito':'Em separação','Em separação':'Pronto para entrega','Pronto para entrega':'Saiu para entrega','Saiu para entrega':'Entregue'};
-const advance=async id=>{if(id>=1000000){try{await advanceSharedDemoOrder(id);setSharedOrders(await fetchSharedDemoOrders())}catch{setDemoSyncState('Falha ao atualizar pedido')}}else{const next=orders.map(o=>o.id===id?{...o,status:statusNext[o.status]||o.status}:o);setOrders(next);saveOrders(next)}};
+const advance=async id=>{if(id<0){try{await advanceSharedDemoOrder(id);setSharedOrders(await fetchSharedDemoOrders())}catch{setDemoSyncState('Falha ao atualizar pedido')}}else{const next=orders.map(o=>o.id===id?{...o,status:statusNext[o.status]||o.status}:o);setOrders(next);saveOrders(next)}};
 const sendOrder=async()=>{
  if(!count)return;
  // Shared demonstration deliberately excludes customer name, phone and address.
