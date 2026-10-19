@@ -589,3 +589,23 @@ img,video,picture{max-width:100%}
 .mv-fulfillment-choices input,.mv-payment-options input{accent-color:#058951}
 .order-payment-state{display:block;margin-top:5px;font-size:11px;color:#23804f}
 @media(max-width:600px){.mv-fulfillment-choices label,.mv-payment-options label{font-size:12px;padding:12px}.checkout-stage.delivery-stage{padding-bottom:calc(110px + env(safe-area-inset-bottom,0px))}}
+
+
+/* Checkout: keep choice radios compact. The generic delivery-form input rule
+   must not expand radio controls into full-width form fields. */
+.delivery-form .mv-fulfillment-choices,
+.delivery-form .mv-payment-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0 18px}
+.delivery-form .mv-fulfillment-choices>label,
+.delivery-form .mv-payment-options>label{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;min-height:102px;min-width:0;padding:14px 10px;text-align:center;overflow:hidden;line-height:1.3}
+.delivery-form .mv-fulfillment-choices input[type="radio"],
+.delivery-form .mv-payment-options input[type="radio"]{display:block;box-sizing:border-box;appearance:auto;-webkit-appearance:radio;flex:0 0 auto;width:18px!important;height:18px!important;min-height:0!important;max-width:18px!important;padding:0!important;margin:0 auto!important;border:0!important;border-radius:50%;accent-color:#008e51}
+.delivery-form .mv-fulfillment-choices>label small{font-size:11px;line-height:1.3;flex-basis:auto}
+.checkout-stage.delivery-stage .delivery-form-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+.checkout-stage.delivery-stage .delivery-form-row>label{min-width:0}
+.checkout-stage.delivery-stage input{min-width:0}
+@media(max-width:600px){
+ .delivery-form .mv-fulfillment-choices>label,
+ .delivery-form .mv-payment-options>label{min-height:91px;font-size:12px}
+ .checkout-stage.delivery-stage .delivery-form-row{grid-template-columns:1fr}
+ .checkout-stage.delivery-stage{padding-bottom:calc(140px + env(safe-area-inset-bottom,0px))}
+}
