@@ -7,8 +7,10 @@ export async function fetchSharedDemoOrders(){
  if(!r.ok)throw new Error('Não foi possível atualizar os pedidos compartilhados');
  const rows=await r.json();
  const p=await fetch(url+'/rest/v1/demo_payment_status?select=order_id,method,status&limit=200',{headers}).then(res=>res.ok?res.json():[]).catch(()=>[]);
+ const fulfillments=await fetch(url+'/rest/v1/demo_order_fulfillment?select=order_id,fulfillment_type&limit=200',{headers}).then(res=>res.ok?res.json():[]).catch(()=>[]);
+ const fulfillmentById=new Map(fulfillments.map(x=>[Number(x.order_id),x.fulfillment_type]));
  const byId=new Map(p.map(x=>[Number(x.order_id),x]));
- return rows.map(x=>{const payment=byId.get(Number(x.id));return {...x,id:-x.id,customer:'Cliente demonstração',paymentStatus:payment?.status==='PAID'?'Pago · PagBank Sandbox':payment?.status==='DECLINED'?'Pagamento recusado':payment?.status==='EXPIRED'?'Pagamento expirado':payment?'Pagamento pendente · '+(payment.method==='PIX'?'Pix':'Cartão'):'Pagamento não iniciado',demo:true,shared:true,phone:null,address:null}});
+ return rows.map(x=>{const payment=byId.get(Number(x.id));return {...x,id:-x.id,fulfillment:fulfillmentById.get(Number(x.id))||'delivery',customer:'Cliente demonstração',paymentStatus:payment?.status==='PAID'?'Pago · PagBank Sandbox':payment?.status==='DECLINED'?'Pagamento recusado':payment?.status==='EXPIRED'?'Pagamento expirado':payment?'Pagamento pendente · '+(payment.method==='PIX'?'Pix':'Cartão'):'Pagamento não iniciado',demo:true,shared:true,phone:null,address:null}});
 }
 export async function submitSharedDemoOrder(items){
  const payload=items.map(p=>({id:p.id,qty:p.qty}));
