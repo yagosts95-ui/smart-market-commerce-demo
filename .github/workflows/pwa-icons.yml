@@ -1,0 +1,43 @@
+name: Prepare PWA icons
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'public/cliente-icon.png'
+      - 'public/gestor-icon.png'
+      - '.github/workflows/pwa-icons.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  icons:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Create correctly sized PNG icons
+        run: |
+          npm install --no-save --ignore-scripts --no-package-lock sharp@0.33.5
+          node - <<'NODE'
+          const sharp = require('sharp');
+          (async () => {
+            for (const name of ['cliente', 'gestor']) {
+              const input = 'public/' + name + '-icon.png';
+              for (const size of [192, 512]) {
+                await sharp(input).resize(size, size, {fit:'contain', background:'#ffffff'}).png().toFile('public/' + name + '-' + size + '.png');
+              }
+              await sharp(input).resize(180,180,{fit:'contain',background:'#ffffff'}).png().toFile('public/'+name+'-apple.png');
+            }
+          })().catch(e => { console.error(e); process.exit(1) });
+          NODE
+      - name: Publish generated icons
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/cliente-192.png public/cliente-512.png public/cliente-apple.png public/gestor-192.png public/gestor-512.png public/gestor-apple.png
+          if ! git diff --cached --quiet; then
+            git commit -m "build: generate installable PWA icon sizes"
+            git push
+          fi
