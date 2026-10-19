@@ -6,16 +6,16 @@ export async function fetchSharedDemoOrders(){
  const r=await fetch(url+'/rest/v1/demo_orders?select=id,created_at,status,lines,items,total&order=created_at.desc&limit=60',{headers});
  if(!r.ok)throw new Error('Não foi possível atualizar os pedidos compartilhados');
  const rows=await r.json();
- return rows.map(x=>({...x,id:x.id+1000000,customer:'Cliente demonstração',paymentStatus:'Não verificado (teste)',demo:true,shared:true,phone:null,address:null}));
+ return rows.map(x=>({...x,id:-x.id,customer:'Cliente demonstração',paymentStatus:'Não verificado (teste)',demo:true,shared:true,phone:null,address:null}));
 }
 export async function submitSharedDemoOrder(items){
  const payload=items.map(p=>({id:p.id,qty:p.qty}));
  const r=await fetch(url+'/rest/v1/rpc/submit_demo_order',{method:'POST',headers,body:JSON.stringify({p_lines:payload})});
  if(!r.ok)throw new Error('Não foi possível enviar o pedido de demonstração');
- return Number(await r.json())+1000000;
+ return -Number(await r.json());
 }
 export async function advanceSharedDemoOrder(id){
- const r=await fetch(url+'/rest/v1/rpc/advance_demo_order',{method:'POST',headers,body:JSON.stringify({p_id:id-1000000})});
+ const r=await fetch(url+'/rest/v1/rpc/advance_demo_order',{method:'POST',headers,body:JSON.stringify({p_id:-id})});
  if(!r.ok)throw new Error('Não foi possível atualizar o pedido');
  return await r.json();
 }
