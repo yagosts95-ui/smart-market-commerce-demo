@@ -3,7 +3,7 @@
   "name": "Mais Você — Gestor",
   "short_name": "MV Gestor",
   "description": "Painel de pedidos e gestão demonstrativo",
-  "start_url": "/gestor/?app=gestor",
+  "start_url": "/gestor/",
   "scope": "/gestor/",
   "display": "standalone",
   "background_color": "#f5faf7",
