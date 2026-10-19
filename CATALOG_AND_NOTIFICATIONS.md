@@ -27,3 +27,15 @@ Para alertas confiáveis: instalar PWA, registrar Service Worker, coletar assina
 
 ## Pagamento sandbox — depois
 Preparar testes com provedor selecionado; usar backend para criar intenção/cobrança sandbox e webhooks verificados para registrar status. Não confiar em valores do cliente ou mensagens de pagamento sem webhook assinado. Nunca misturar sandbox e transações reais.
+
+
+## Integração universal sem ERP identificado — esquema preparado
+O banco `mais-voce-staging` agora inclui:
+- `catalog_import_rows`: linhas recebidas, campos padronizados, carga bruta e erros de validação antes de eventual aprovação;
+- `products.reserved_quantity`: saldo reservado, separado do estoque físico;
+- `online_catalog`: leitura da disponibilidade publicada, respeitando o menor entre saldo livre e limite de venda online;
+- `reserve_online_stock`: lógica básica de reserva que **não está liberada para os papéis públicos**. Só será usada por um serviço de checkout autenticado e transacional quando ele existir.
+
+Contrato proposto de importação: `sku,barcode,name,unit,price,stock_quantity,image_url,source_system,external_code`. A camada de adaptação futura mapeará campos do ERP para esse contrato, mantendo validações e revisão humana antes de publicar. Arquivos externos devem ser tratados como dados não confiáveis; nunca executar conteúdo de planilha ou confiar em valores sem validar.
+
+Os 150 itens `DEMO-...` permanecem `published_online=false` e não representam estoque verdadeiro. A interface atual permite somente ajustes locais de demonstração. **Não há reserva de estoque global conectada ao checkout ainda.**
