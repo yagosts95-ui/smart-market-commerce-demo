@@ -75,7 +75,14 @@ const importCatalogPreview=async file=>{
  const next={...productEdits};
  raw.slice(1,1001).forEach(line=>{const v=parseRow(line);const p=products.find(p=>idCol>=0&&['DEMO-'+String(p.id).padStart(3,'0'),String(p.id)].includes(v[idCol]))||products.find(p=>nameCol>=0&&p.name.toLowerCase()===String(v[nameCol]||'').toLowerCase());if(!p)return;
  const update={...next[p.id]};
- if(priceCol>=0&&v[priceCol]){const n=Number(v[priceCol].replace('R
+ if(priceCol>=0&&v[priceCol]){const n=Number(v[priceCol].replace('R$','').trim().replace(',','.'));if(Number.isFinite(n)&&n>=0)update.price=n}
+ if(stockCol>=0&&v[stockCol]){const n=Number(v[stockCol].replace(',','.'));if(Number.isFinite(n)&&n>=0)update.stock=Math.floor(n)}
+ if(imageCol>=0&&/^https:\/\//.test(v[imageCol]||''))update.photo=v[imageCol];
+ next[p.id]=update;changed++;
+ });
+ setProductEdits(next);localStorage.setItem('maisvoce-catalog-preview',JSON.stringify(next));setImportReport(changed+' produtos reconhecidos. Alterações locais, sem atualizar Supabase.');
+ }catch(e){setImportReport('Importação não realizada: '+e.message)}
+};
 const[orders,setOrders]=useState(readOrders);
 const[demoSyncState,setDemoSyncState]=useState('Conectando demonstração...');
 const[sharedOrders,setSharedOrders]=useState([]);
