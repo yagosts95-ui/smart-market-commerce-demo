@@ -4,7 +4,7 @@ import{ShoppingCart,Search,MapPin,ChevronRight,ChevronLeft,Plus,Minus,Trash2,Tag
 import './styles.css';
 import {readOrders,saveOrders,subscribeOrders,statuses} from './demo-store.js';
 import {demoExtraItems} from './demo-products.js';
-import {fetchSharedDemoOrders,submitSharedDemoOrder,advanceSharedDemoOrder} from './shared-demo.js';
+import {fetchSharedDemoOrders,submitSharedDemoOrder,advanceSharedDemoOrder,fetchDemoStock} from './shared-demo.js';
 
 const products=[
 {id:1,name:'Banana prata',unit:'kg',price:4.99,old:6.49,cat:'Hortifruti',emoji:'🍌',bg:'#fff3d7'},
@@ -79,27 +79,29 @@ const importCatalogPreview=async file=>{
 const[orders,setOrders]=useState(readOrders);
 const[demoSyncState,setDemoSyncState]=useState('Conectando demonstração...');
 const[sharedOrders,setSharedOrders]=useState([]);
+const[sharedStock,setSharedStock]=useState(null);
 const[mySharedDemoIds,setMySharedDemoIds]=useState(()=>{try{return JSON.parse(localStorage.getItem('maisvoce-my-shared-demo-ids')||'[]')}catch{return []}});
 useEffect(()=>subscribeOrders(setOrders),[]);
-useEffect(()=>{let active=true;const sync=async()=>{try{const result=await fetchSharedDemoOrders();if(active){setSharedOrders(result);setDemoSyncState('Pedidos compartilhados ativos')}}catch{if(active)setDemoSyncState('Sem conexão com a demonstração')}};sync();const interval=setInterval(sync,4000);return()=>{active=false;clearInterval(interval)}},[]);
+useEffect(()=>{let active=true;const sync=async()=>{try{const result=await fetchSharedDemoOrders();if(active){setSharedOrders(result);fetchDemoStock().then(st=>{if(active)setSharedStock(st)}).catch(()=>{});setDemoSyncState('Pedidos compartilhados ativos')}}catch{if(active)setDemoSyncState('Sem conexão com a demonstração')}};sync();const interval=setInterval(sync,4000);return()=>{active=false;clearInterval(interval)}},[]);
 useEffect(()=>{if(page!=='gestor')return;const newest=sharedOrders.reduce((n,o)=>Math.max(n,-o.id),0);if(seenShared.current===null){seenShared.current=newest;return}if(newest>seenShared.current){seenShared.current=newest;if(typeof Notification!=='undefined'&&Notification.permission==='granted'){new Notification('Mais Você · Novo pedido de teste',{body:'Novo pedido disponível no painel gestor.'})}}},[sharedOrders,page]);
 const visibleOrders=[...sharedOrders,...orders.filter(o=>!o.shared)].sort((a,b)=>(b.shared?Date.parse(b.created_at):b.id)-(a.shared?Date.parse(a.created_at):a.id));
 const navigate=p=>{if(p==='carrinho')setCheckoutStep(1);if(p==='gestor'){window.location.assign('/gestor');return}if(location.pathname.startsWith('/gestor')){window.location.assign('/');return}setPage(p);setVisibleCount(24);setMenu(false);setDetail(null);window.history.pushState({},'',p==='gestor'?'/gestor':'/');window.scrollTo(0,0)};
-const add=id=>setCart(s=>{const limit=productEdits[id]?.stock; if(productEdits[id]?.visible===false||limit===0)return s;return {...s,[id]:Math.min((s[id]||0)+1,limit==null?999:limit)}});
+const add=id=>setCart(s=>{const local=productEdits[id]?.stock;const remote=sharedStock?.[id];const limit=Math.min(local??999,remote??999);if(productEdits[id]?.visible===false||limit<=0)return s;return {...s,[id]:Math.min((s[id]||0)+1,limit)}});
 const remove=id=>setCart(s=>{const a={...s};if(a[id]>1)a[id]--;else delete a[id];return a});
-const cartItems=products.filter(p=>cart[p.id]&&productEdits[p.id]?.visible!==false&&productEdits[p.id]?.stock!==0).map(p=>({...p,price:productEdits[p.id]?.price??p.price,qty:Math.min(cart[p.id],productEdits[p.id]?.stock??999)}));
+const cartItems=products.filter(p=>cart[p.id]&&productEdits[p.id]?.visible!==false&&productEdits[p.id]?.stock!==0&&sharedStock?.[p.id]!==0).map(p=>({...p,price:productEdits[p.id]?.price??p.price,qty:Math.min(cart[p.id],productEdits[p.id]?.stock??999,sharedStock?.[p.id]??999)}));
 const count=cartItems.reduce((s,p)=>s+p.qty,0);
 const subtotal=cartItems.reduce((s,p)=>s+p.price*p.qty,0);
-const filtered=products.filter(p=>(category==='Todos'||p.cat===category)&&p.name.toLowerCase().includes(query.toLowerCase())&&productEdits[p.id]?.visible!==false&&productEdits[p.id]?.stock!==0).map(p=>({...p,price:productEdits[p.id]?.price??p.price,photo:productEdits[p.id]?.photo??p.photo}));
+const filtered=products.filter(p=>(category==='Todos'||p.cat===category)&&p.name.toLowerCase().includes(query.toLowerCase())&&productEdits[p.id]?.visible!==false&&productEdits[p.id]?.stock!==0&&sharedStock?.[p.id]!==0).map(p=>({...p,price:productEdits[p.id]?.price??p.price,photo:productEdits[p.id]?.photo??p.photo}));
 const statusNext={'Novo':'Aceito','Aceito':'Em separação','Em separação':'Pronto para entrega','Pronto para entrega':'Saiu para entrega','Saiu para entrega':'Entregue'};
 const advance=async id=>{if(id<0){try{await advanceSharedDemoOrder(id);setSharedOrders(await fetchSharedDemoOrders())}catch{setDemoSyncState('Falha ao atualizar pedido')}}else{const next=orders.map(o=>o.id===id?{...o,status:statusNext[o.status]||o.status}:o);setOrders(next);saveOrders(next)}};
 const sendOrder=async()=>{
  if(!count)return;
+ if(cartItems.some(p=>p.qty>(sharedStock?.[p.id]??999))){setCheckoutError('Estoque insuficiente. Revise o carrinho.');return}
  // Shared demonstration deliberately excludes customer name, phone and address.
  try {
   setCheckoutError('');
   const orderId=await submitSharedDemoOrder(cartItems);
-  setSharedOrders(await fetchSharedDemoOrders());
+  setSharedOrders(await fetchSharedDemoOrders());setSharedStock(await fetchDemoStock());
   setMySharedDemoIds(previous=>{const next=[orderId,...previous].slice(0,30);localStorage.setItem('maisvoce-my-shared-demo-ids',JSON.stringify(next));return next});setLastOrderId(orderId);setOrderSent(true);setCart({});setCheckoutStep(1);setPage('pedidos');
  } catch(e) {setCheckoutError('Não foi possível enviar o pedido de teste. Confira a conexão e tente novamente.');}
 };
