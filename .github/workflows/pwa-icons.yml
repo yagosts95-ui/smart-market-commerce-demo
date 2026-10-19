@@ -6,6 +6,7 @@ on:
       - 'public/cliente-icon.png'
       - 'public/gestor-icon.png'
       - '.github/workflows/pwa-icons.yml'
+      - 'scripts/generate-pwa-icons.mjs'
   workflow_dispatch:
 permissions:
   contents: write
@@ -17,27 +18,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Create correctly sized PNG icons
+      - name: Create icons without distortion
         run: |
           npm install --no-save --ignore-scripts --no-package-lock sharp@0.33.5
-          node - <<'NODE'
-          const sharp = require('sharp');
-          (async () => {
-            for (const name of ['cliente', 'gestor']) {
-              const input = 'public/' + name + '-icon.png';
-              for (const size of [192, 512]) {
-                await sharp(input).resize(size, size, {fit:'contain', background:'#ffffff'}).png().toFile('public/' + name + '-' + size + '.png');
-              }
-              await sharp(input).resize(180,180,{fit:'contain',background:'#ffffff'}).png().toFile('public/'+name+'-apple.png');
-            }
-          })().catch(e => { console.error(e); process.exit(1) });
-          NODE
+          node scripts/generate-pwa-icons.mjs
       - name: Publish generated icons
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git pull --rebase origin main
-          git add public/cliente-192.png public/cliente-512.png public/cliente-apple.png public/gestor-192.png public/gestor-512.png public/gestor-apple.png
+          git add public/cliente-192.png public/cliente-512.png public/cliente-apple.png public/gestor-192.png public/gestor-512.png public/gestor-apple.png public/cliente-maskable.png public/gestor-maskable.png
           if ! git diff --cached --quiet; then
             git commit -m "build: generate installable PWA icon sizes"
             git push
