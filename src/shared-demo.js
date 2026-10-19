@@ -26,3 +26,9 @@ export async function fetchDemoStock(){
  const data=await r.json();
  return Object.fromEntries(data.map(row=>[Number(row.product_sku.replace('DEMO-','')),Math.max(0,row.online_limit-row.reserved)]));
 }
+
+export async function fetchDemoCatalog(){
+ const r=await fetch(url+'/rest/v1/products?select=sku,name,unit,price,compare_at_price,image_url,category_id,active&sku=like.DEMO-*&order=sku.asc&limit=200',{headers});
+ if(!r.ok)throw new Error('Catálogo do Supabase indisponível');
+ return (await r.json()).map(p=>({...p,demoId:Number(p.sku.replace('DEMO-',''))}));
+}
