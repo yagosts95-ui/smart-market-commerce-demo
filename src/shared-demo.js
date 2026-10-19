@@ -32,3 +32,14 @@ export async function fetchDemoCatalog(){
  if(!r.ok)throw new Error('Catálogo do Supabase indisponível');
  return (await r.json()).map(p=>({...p,demoId:Number(p.sku.replace('DEMO-',''))}));
 }
+
+export async function cancelSharedDemoOrder(id){
+ const r=await fetch(url+'/rest/v1/rpc/cancel_demo_order',{method:'POST',headers,body:JSON.stringify({p_id:-id})});
+ if(!r.ok)throw new Error('Falha ao cancelar pedido');
+ return await r.json();
+}
+export async function expireStaleDemoOrders(){
+ const r=await fetch(url+'/rest/v1/rpc/expire_old_demo_orders',{method:'POST',headers,body:'{}'});
+ if(!r.ok)throw new Error('Falha ao verificar reservas vencidas');
+ return await r.json();
+}
