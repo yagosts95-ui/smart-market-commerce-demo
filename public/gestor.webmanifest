@@ -10,6 +10,12 @@
   "theme_color": "#064b31",
   "icons": [
     {
+      "src": "/gestor-icon.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
       "src": "/gestor-icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
