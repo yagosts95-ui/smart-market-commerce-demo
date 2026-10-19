@@ -567,3 +567,12 @@ img,video,picture{max-width:100%}
 .kanban-mode{display:inline-flex;align-items:center;gap:7px;border:1px solid #b9dfc7;background:#edf9f1;color:#17613e;border-radius:9px;padding:9px 12px;font-size:12px;font-weight:800;cursor:pointer}.kanban-mode input{accent-color:#078b4e;width:16px;height:16px}.kanban-showcase{display:inline-block;padding:3px 7px;margin-left:8px;color:#236c47;background:#e8f4ec;border-radius:20px;font-size:9px;font-weight:800}.kanban-wait{display:inline-block;margin:7px 0;background:#fff5df;color:#946014;padding:5px 8px;border-radius:7px;font-size:10px;font-weight:750}.kanban-card .kanban-payment{font-size:11px;line-height:1.4}@media(max-width:760px){.kanban-mode{font-size:11px}.orders-board>.section-head{gap:9px;flex-wrap:wrap}}
 
 .sandbox-pay-button{background:#067b4a;color:#fff;border:0;border-radius:9px;padding:11px 14px;font-size:12px;font-weight:750;margin:10px 0;cursor:pointer}.sandbox-pay-button:disabled{opacity:.6}.sandbox-pay-error{font-size:12px;color:#ac3737;background:#fff3f0;border-radius:8px;padding:10px}
+
+
+.payment-method-choices{display:grid;gap:12px;margin:18px 0}
+.payment-method-choices label{display:flex;align-items:center;gap:12px;flex-wrap:wrap;border:1px solid #d4e6dc;border-radius:13px;padding:18px;background:#fff;cursor:pointer;font-size:15px;font-weight:800;color:#184d34}
+.payment-method-choices label.selected{border:2px solid #058f52;background:#f0faf4}
+.payment-method-choices label input{width:19px;height:19px;accent-color:#058f52}
+.payment-method-choices label small{width:100%;padding-left:31px;color:#6d8376;font-size:12px;font-weight:500}
+.checkout-steps{flex-wrap:wrap;gap:7px}
+@media(max-width:760px){.payment-stage{display:flex;flex-direction:column;gap:18px;padding-bottom:calc(120px + env(safe-area-inset-bottom,0px))}.payment-stage .checkout-summary-card{width:100%}.payment-stage .checkout-advance{position:static!important;width:100%!important}}
