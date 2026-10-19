@@ -111,7 +111,7 @@ const[mySharedDemoIds,setMySharedDemoIds]=useState(()=>{try{return JSON.parse(lo
 useEffect(()=>subscribeOrders(setOrders),[]);
 useEffect(()=>{let active=true;fetchDemoCatalog().then(rows=>{if(active){setDbCatalog(Object.fromEntries(rows.map(p=>[p.demoId,p])));setCatalogConnection('Supabase conectado')}}).catch(()=>{if(active)setCatalogConnection('Exibindo catálogo local')});return()=>{active=false}},[]);
 useEffect(()=>{let active=true;const sync=async()=>{try{await expireStaleDemoOrders();const result=await fetchSharedDemoOrders();if(active){setSharedOrders(result);fetchDemoStock().then(st=>{if(active)setSharedStock(st)}).catch(()=>{});fetchDemoOverrides().then(ov=>{if(active)setRemoteEdits(ov)}).catch(()=>{});setDemoSyncState('Pedidos compartilhados ativos')}}catch{if(active)setDemoSyncState('Sem conexão com a demonstração')}};sync();const interval=setInterval(sync,4000);return()=>{active=false;clearInterval(interval)}},[]);
-useEffect(()=>{if(page!=='gestor')return;const newest=sharedOrders.reduce((n,o)=>Math.max(n,-o.id),0);if(seenShared.current===null){seenShared.current=newest;return}if(newest>seenShared.current){seenShared.current=newest;if(typeof Notification!=='undefined'&&Notification.permission==='granted'){new Notification('Mais Você · Novo pedido de teste',{body:'Novo pedido disponível no painel gestor.'})}}},[sharedOrders,page]);
+useEffect(()=>{if(page!=='gestor')return;const newest=sharedOrders.filter(o=>o.paymentStatus?.startsWith('Pago')).reduce((n,o)=>Math.max(n,-o.id),0);if(seenShared.current===null){seenShared.current=newest;return}if(newest>seenShared.current){seenShared.current=newest;if(typeof Notification!=='undefined'&&Notification.permission==='granted'){new Notification('Mais Você · Novo pedido de teste',{body:'Novo pedido disponível no painel gestor.'})}}},[sharedOrders,page]);
 const visibleOrders=[...sharedOrders,...orders.filter(o=>!o.shared)].sort((a,b)=>(b.shared?Date.parse(b.created_at):b.id)-(a.shared?Date.parse(a.created_at):a.id));
 const boardOrders=showcaseKanban?presentationOrders.map(o=>({...o,status:showcaseStates[o.id]||o.status})):sharedOrders.filter(o=>o.paymentStatus?.startsWith('Pago'));
 const awaitingPaymentCount=sharedOrders.filter(o=>o.paymentStatus?.startsWith('Pagamento pendente')).length;
@@ -140,7 +140,6 @@ const sendOrder=async()=>{
   setLastOrderId(orderId);
   const customer={name:clientName,phone:delivery.phone,address:delivery};
   const pay=await createSandboxPayment(orderId,paymentMethod,customer);
-  notifyManagerAboutDemoOrder(orderId).catch(()=>{});
   if(pay.status==='PAID'){setCart({});setOrderSent(true);setPage('pedidos')}
   else if(paymentMethod==='PIX'&&pay.pix_text){setPixPayment({orderId,...pay});setCheckoutStep(4)}
   else if(paymentMethod==='CREDIT_CARD'&&pay.payment_url)window.location.assign(pay.payment_url);
