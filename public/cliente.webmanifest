@@ -1,10 +1,10 @@
 {
-  "id": "/?app=cliente",
+  "id": "/cliente/",
   "name": "Mais Você — Cliente",
   "short_name": "Mais Você",
   "description": "Catálogo e pedidos demonstrativos do Mais Você Online",
-  "start_url": "/?app=cliente",
-  "scope": "/",
+  "start_url": "/cliente/",
+  "scope": "/cliente/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#008f4d",
