@@ -519,3 +519,9 @@
 .catalog-status{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:12px 0 18px;padding:12px 14px;border:1px solid #d4eadd;border-radius:10px;background:#f0faf4;color:#176844;font-size:12px;font-weight:700}.catalog-manage-row{min-width:0}.catalog-manage-row input{min-width:0}@media(max-width:760px){.catalog-status{flex-direction:column}.catalog-manage-list{max-height:none}.manager-products{min-width:0}}
 
 .kanban-cancel{border:1px solid #e9b9b1;background:#fff6f4;color:#a13a31;border-radius:8px;padding:9px 12px;cursor:pointer;font-size:11px;font-weight:750;width:100%}.kanban-cancel:hover{background:#ffe8e3}
+
+
+.catalog-manage-row{grid-template-columns:56px minmax(130px,1fr) 100px 130px 80px 76px}
+.catalog-save{background:#008a4b;border:0;color:white;border-radius:8px;padding:10px 9px;font-size:11px;font-weight:800;cursor:pointer}
+.catalog-save:hover{background:#067342}
+@media(max-width:800px){.catalog-manage-row{grid-template-columns:45px minmax(0,1fr) 82px}.catalog-manage-row .catalog-save{grid-column:3;grid-row:auto}.catalog-manage-row .catalog-published{grid-column:2}.catalog-manage-row label:nth-of-type(2){grid-column:2}}
