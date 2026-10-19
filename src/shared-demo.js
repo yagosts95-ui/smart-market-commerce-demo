@@ -43,3 +43,19 @@ export async function expireStaleDemoOrders(){
  if(!r.ok)throw new Error('Falha ao verificar reservas vencidas');
  return await r.json();
 }
+
+export async function fetchDemoFlashOffers(){
+ const r=await fetch(url+'/rest/v1/demo_flash_offers?select=product_id,discount_percent,ends_at&limit=150',{headers});
+ if(!r.ok)throw new Error('Falha ao consultar ofertas');
+ return (await r.json()).filter(o=>Date.parse(o.ends_at)>Date.now());
+}
+export async function setDemoFlashOffer(productId,discount,hours){
+ const r=await fetch(url+'/rest/v1/rpc/set_demo_flash_offer',{method:'POST',headers,body:JSON.stringify({p_product_id:productId,p_discount:discount,p_hours:hours})});
+ if(!r.ok)throw new Error('Falha ao ativar oferta');
+ return r.json();
+}
+export async function stopDemoFlashOffer(productId){
+ const r=await fetch(url+'/rest/v1/rpc/stop_demo_flash_offer',{method:'POST',headers,body:JSON.stringify({p_product_id:productId})});
+ if(!r.ok)throw new Error('Falha ao encerrar oferta');
+ return r.json();
+}
