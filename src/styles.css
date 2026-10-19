@@ -579,3 +579,5 @@ img,video,picture{max-width:100%}
 
 
 .pix-panel{text-align:center;max-width:640px;margin-inline:auto}.pix-panel h2{font-size:clamp(20px,3vw,26px);color:#104d34}.pix-panel>p{font-size:13px;color:#5f7468;line-height:1.55}.pix-qr{display:block;width:min(260px,75vw);height:auto;margin:22px auto;background:white;padding:12px;border:1px solid #dbe9df;border-radius:15px;box-shadow:0 7px 22px #164a3015}.pix-code-label{display:grid;gap:7px;text-align:left;font-size:12px;font-weight:750;color:#245840}.pix-code-label textarea{width:100%;overflow-wrap:anywhere;resize:none;border:1px solid #b9dec8;border-radius:10px;background:#f5fbf7;padding:12px;font:12px/1.5 monospace}.pix-panel .checkout-back{margin-top:16px}.pix-stage{padding-bottom:calc(115px + env(safe-area-inset-bottom,0px))}@media(min-width:761px){.pix-stage{padding-bottom:36px}}
+
+.kanban-waiting-payment{display:inline-flex;align-items:center;padding:8px 11px;background:#fff8e9;border:1px solid #f2e1b5;border-radius:8px;color:#8f6324;font-size:11px;font-weight:750;line-height:1.4}
