@@ -4,7 +4,7 @@
   "short_name": "MV Gestor",
   "description": "Painel de pedidos e gestão demonstrativo",
   "start_url": "/gestor?app=gestor",
-  "scope": "/",
+  "scope": "/gestor",
   "display": "standalone",
   "background_color": "#f5faf7",
   "theme_color": "#064b31",
