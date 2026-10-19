@@ -19,3 +19,10 @@ export async function advanceSharedDemoOrder(id){
  if(!r.ok)throw new Error('Não foi possível atualizar o pedido');
  return await r.json();
 }
+
+export async function fetchDemoStock(){
+ const r=await fetch(url+'/rest/v1/demo_inventory?select=product_sku,online_limit,reserved&limit=300',{headers});
+ if(!r.ok)throw new Error('Estoque demonstrativo indisponível');
+ const data=await r.json();
+ return Object.fromEntries(data.map(row=>[Number(row.product_sku.replace('DEMO-','')),Math.max(0,row.online_limit-row.reserved)]));
+}
