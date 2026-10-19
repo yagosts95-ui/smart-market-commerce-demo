@@ -10,6 +10,12 @@
   "theme_color": "#008f4d",
   "icons": [
     {
+      "src": "/cliente-icon.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
       "src": "/cliente-icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
