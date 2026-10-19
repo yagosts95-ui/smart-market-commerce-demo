@@ -6,7 +6,7 @@ import{ShoppingCart,Search,MapPin,ChevronRight,ChevronLeft,Plus,Minus,Trash2,Tag
 import './styles.css';
 import {readOrders,saveOrders,subscribeOrders,statuses} from './demo-store.js';
 import {demoExtraItems} from './demo-products.js';
-import {fetchSharedDemoOrders,submitSharedDemoOrder,advanceSharedDemoOrder,fetchDemoStock,fetchDemoCatalog,cancelSharedDemoOrder,expireStaleDemoOrders,fetchDemoFlashOffers,setDemoFlashOffer,stopDemoFlashOffer,fetchDemoOverrides,saveDemoOverride,subscribeManagerToPush,notifyManagerAboutDemoOrder,createPagBankSandboxCheckout} from './shared-demo.js';
+import {fetchSharedDemoOrders,submitSharedDemoOrder,advanceSharedDemoOrder,fetchDemoStock,fetchDemoCatalog,cancelSharedDemoOrder,expireStaleDemoOrders,fetchDemoFlashOffers,setDemoFlashOffer,stopDemoFlashOffer,fetchDemoOverrides,saveDemoOverride,subscribeManagerToPush,notifyManagerAboutDemoOrder,createPagBankSandboxCheckout,createSandboxPayment,checkSandboxPayment} from './shared-demo.js';
 
 const products=[
 {id:1,name:'Banana prata',unit:'kg',price:4.99,old:6.49,cat:'Hortifruti',emoji:'🍌',bg:'#fff3d7'},
@@ -50,7 +50,10 @@ const[checkoutStep,setCheckoutStep]=useState(1);
 const[paymentMethod,setPaymentMethod]=useState('PIX');
 const[checkoutBusy,setCheckoutBusy]=useState(false);
 const[pendingSandboxOrder,setPendingSandboxOrder]=useState(null);
+const[pixPayment,setPixPayment]=useState(null);
 const updateDelivery=(field,value)=>setDelivery(v=>({...v,[field]:value}));
+useEffect(()=>{if(!pixPayment?.orderId)return;let active=true;const poll=async()=>{try{const p=await checkSandboxPayment(pixPayment.orderId);if(!active)return;if(p.status==='PAID'){setPixPayment(v=>v?{...v,status:'PAID'}:v);setSharedOrders(await fetchSharedDemoOrders());setOrderSent(true);setCart({});setPendingSandboxOrder(null)}else if(p.status!=='PENDING'){setPixPayment(v=>v?{...v,status:p.status}:v)}}catch{}};poll();const timer=setInterval(poll,6000);return()=>{active=false;clearInterval(timer)}},[pixPayment?.orderId]);
+
 const[adminTab,setAdminTab]=useState('visao');
 const[showcaseKanban,setShowcaseKanban]=useState(false);
 const[showcaseStates,setShowcaseStates]=useState({});
@@ -134,12 +137,17 @@ const sendOrder=async()=>{
   setPendingSandboxOrder(orderId);
   setMySharedDemoIds(previous=>{const next=[orderId,...previous].slice(0,30);localStorage.setItem('maisvoce-my-shared-demo-ids',JSON.stringify(next));return next});
   setLastOrderId(orderId);
+  const customer={name:clientName,phone:delivery.phone,address:delivery};
+  const pay=await createSandboxPayment(orderId,paymentMethod,customer);
   notifyManagerAboutDemoOrder(orderId).catch(()=>{});
-  const url=await createPagBankSandboxCheckout(orderId,paymentMethod);
-  window.location.assign(url);
- } catch(e) {setCheckoutError((e.message||'Não foi possível abrir o pagamento.')+' Confira Meus pedidos antes de tentar novamente.');setCheckoutBusy(false)}
+  if(pay.status==='PAID'){setCart({});setOrderSent(true);setPage('pedidos')}
+  else if(paymentMethod==='PIX'&&pay.pix_text){setPixPayment({orderId,...pay});setCheckoutStep(4)}
+  else if(paymentMethod==='CREDIT_CARD'&&pay.payment_url)window.location.assign(pay.payment_url);
+  else throw Error('PagBank não retornou as instruções de pagamento');
+ }catch(e){setCheckoutError(e.message||'Falha ao iniciar o pagamento; consulte Meus Pedidos antes de repetir.')}
+ finally{setCheckoutBusy(false)}
 };
-const openPagBankSandbox=async id=>{setPagBankError('');setPagBankBusy(id);try{const payUrl=await createPagBankSandboxCheckout(id,'PIX');window.location.assign(payUrl)}catch(e){setPagBankError(e.message||'Falha ao abrir PagBank Sandbox')}finally{setPagBankBusy(null)}};
+const openPagBankSandbox=async id=>{setPagBankError('');setPagBankBusy(id);try{const pay=await createSandboxPayment(id,'PIX',{name:clientName||'Cliente Sandbox',phone:delivery.phone||'11999999999',address:delivery});if(pay.pix_text){setPixPayment({orderId:id,...pay});setCheckoutStep(4);setPage('carrinho')}else setPagBankError('Pix não disponível para este pedido')}catch(e){setPagBankError(e.message||'Falha ao iniciar Pix')}finally{setPagBankBusy(null)}};
 const printDemand=o=>{setPrintOrder(o);setTimeout(()=>window.print(),100)};
 const newOrderCount=visibleOrders.filter(o=>o.status==='Novo').length;
 const activateFlash=async()=>{const p=catalogProducts.find(x=>x.id===Number(flashProduct));const discount=Number(flashDiscount),hours=Number(flashHours);if(!p||!Number.isInteger(discount)||discount<1||discount>70||!Number.isInteger(hours)||hours<1||hours>24)return;try{await setDemoFlashOffer(p.id,discount,hours);setFlashOffers(await fetchDemoFlashOffers());setOfferError('')}catch{setOfferError('Não foi possível ativar a oferta')}};
@@ -157,7 +165,7 @@ return <div className={showGestor?'app manager-mode':'app'}>
 {(page==='catalogo'||page==='ofertas')&&<section className="container section inside-page"><div className="breadcrumbs">Início <ChevronRight size={13}/> {page==='ofertas'?'Ofertas':'Produtos'}</div><div className="section-head"><div><span className="overline">{page==='ofertas'?'ECONOMIZE MAIS':'ESCOLHA SEUS FAVORITOS'}</span><h1>{page==='ofertas'?'Ofertas ativas':'Todos os produtos'}</h1><p className="muted">Confira as opções do nosso catálogo.</p></div><SlidersHorizontal color="#008F4D"/></div><div className="filter-pills">{['Todos',...cats].map(c=><button key={c} className={category===c?'selected':''} onClick={()=>setCategory(c)}>{c}</button>)}</div><div className="products-grid">{filtered.slice(0,visibleCount).map(p=><ProductCard key={p.id} p={p} onAdd={add} onDetails={setDetail}/>)}</div>{filtered.length>visibleCount&&<div className="load-more"><p>Exibindo {visibleCount} de {filtered.length} produtos demonstrativos</p><button className="button btn-outline" onClick={()=>setVisibleCount(n=>n+24)}>Carregar mais produtos <ChevronRight size={16}/></button></div>}{!filtered.length&&<div className="empty">Nenhum produto encontrado.</div>}</section>}
 {page==='carrinho'&&<section className="container section inside-page checkout-page">
 <div className="breadcrumbs">Início <ChevronRight size={13}/> Meu carrinho</div>
-<div className="checkout-heading"><div><span className="overline">SUAS COMPRAS</span><h1>{checkoutStep===1?'Meu carrinho':checkoutStep===2?'Dados de entrega':'Pagamento'}</h1></div><div className="checkout-steps"><span className={checkoutStep===1?'current':'done'}>1 · Carrinho</span><span className={checkoutStep===2?'current':''}>2 · Entrega</span><span className={checkoutStep===3?'current':''}>3 · Pagamento</span></div></div>
+<div className="checkout-heading"><div><span className="overline">SUAS COMPRAS</span><h1>{checkoutStep===1?'Meu carrinho':checkoutStep===2?'Dados de entrega':checkoutStep===3?'Pagamento':'Aguardando Pix'}</h1></div><div className="checkout-steps"><span className={checkoutStep===1?'current':'done'}>1 · Carrinho</span><span className={checkoutStep===2?'current':''}>2 · Entrega</span><span className={checkoutStep===3?'current':''}>3 · Pagamento</span>{checkoutStep===4&&<span className="current">4 · Pix</span>}</div></div>
 {!count?<div className="empty"><ShoppingCart size={48}/><h2>Seu carrinho está vazio</h2><button className="button btn-green" onClick={()=>navigate('catalogo')}>Ver produtos</button></div>:checkoutStep===1?
 <div className="checkout-stage cart-stage"><div className="cart-list checkout-cart-list"><div className="checkout-list-heading"><h2>Produtos selecionados</h2><span>{count} itens</span></div>{cartItems.map(p=><div className="cart-row" key={p.id}><div className="cart-emoji"><img src={p.photo||"/assets/mais-voce/optimized/"+categoryImages[p.cat].replace(".png",".webp")} alt={p.name}/></div><div className="cart-info"><strong>{p.name}</strong><span>{p.unit}</span><div className="qty"><button onClick={()=>remove(p.id)} aria-label={'Diminuir '+p.name}><Minus size={15}/></button><span>{p.qty}</span><button onClick={()=>add(p.id)} aria-label={'Aumentar '+p.name}><Plus size={15}/></button></div></div><strong className="cart-line-price">{money(p.qty*p.price)}</strong><button className="trash" onClick={()=>setCart(v=>({...v,[p.id]:0}))} aria-label={'Remover '+p.name}><Trash2 size={17}/></button></div>)}</div>
 <aside className="checkout-summary-card"><h2>Resumo da compra</h2><div className="summary-line"><span>Produtos</span><strong>{money(subtotal)}</strong></div><div className="summary-line"><span>Entrega</span><span>A definir</span></div><div className="summary-line total"><span>Subtotal</span><strong>{money(subtotal)}</strong></div><button className="button btn-green full checkout-advance" onClick={()=>{setCheckoutStep(2);window.scrollTo(0,0)}}>Continuar para entrega <ArrowRight size={17}/></button><p className="checkout-help">Revise os itens antes de continuar.</p></aside></div>
