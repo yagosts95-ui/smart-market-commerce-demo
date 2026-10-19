@@ -1,0 +1,25 @@
+{
+  "id": "/app-gestor",
+  "name": "Mais Você — Gestor",
+  "short_name": "MV Gestor",
+  "description": "Painel de pedidos e gestão demonstrativo",
+  "start_url": "/gestor?app=gestor",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f5faf7",
+  "theme_color": "#064b31",
+  "icons": [
+    {
+      "src": "/assets/mais-voce/optimized/logo.webp",
+      "sizes": "192x192",
+      "type": "image/webp",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/mais-voce/optimized/logo.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "any"
+    }
+  ]
+}
