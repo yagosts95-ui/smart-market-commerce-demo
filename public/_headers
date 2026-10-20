@@ -1,0 +1,14 @@
+/index.html
+  Cache-Control: no-store, max-age=0
+/cliente/index.html
+  Cache-Control: no-store, max-age=0
+/gestor/index.html
+  Cache-Control: no-store, max-age=0
+/cliente/
+  Cache-Control: no-store, max-age=0
+/gestor/
+  Cache-Control: no-store, max-age=0
+/demo-push-sw.js
+  Cache-Control: no-store, max-age=0
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
