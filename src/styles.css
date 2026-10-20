@@ -690,3 +690,30 @@ html,body,#root{max-width:100%;min-width:0}
  .manager-mode .manager-top>.button svg{width:14px;height:14px;flex-shrink:0}
 }
 @media(max-width:360px){.manager-mode .manager-top{grid-template-columns:32px minmax(0,1fr) 65px;padding-inline:8px;gap:5px}.manager-mode .manager-top>.button{max-width:65px;font-size:9px}.manager-mode .manager-top .overline{font-size:8px}}
+
+/* Mobile Gestor sidebar: isolate from document sizing and avoid viewport overflow */
+@media(max-width:760px){
+ .manager-mode .manager-shell{position:relative;isolation:isolate}
+ .manager-mode .manager-side,
+ .manager-mode .manager-side.expanded{
+  position:fixed!important;inset:0 auto 0 0!important;
+  display:flex!important;flex-direction:column!important;
+  box-sizing:border-box!important;width:min(280px,84vw)!important;
+  max-width:calc(100vw - 36px)!important;min-width:0!important;
+  height:100dvh!important;max-height:100dvh!important;min-height:0!important;
+  padding:0!important;margin:0!important;
+  overflow-x:hidden!important;overflow-y:auto!important;
+  overscroll-behavior:contain;z-index:100!important;
+  box-shadow:12px 0 35px #081f163d;
+  transform:translate3d(-110%,0,0)!important;
+  transition:transform .22s ease!important;
+ }
+ .manager-mode .manager-side.expanded{transform:translate3d(0,0,0)!important}
+ .manager-mode .manager-side-brand,.manager-mode .manager-logo,.manager-mode .manager-menu,.manager-mode .manager-side-foot{box-sizing:border-box;min-width:0;max-width:100%;width:100%}
+ .manager-mode .manager-logo{padding:calc(15px + env(safe-area-inset-top,0px)) 13px 16px}
+ .manager-mode .manager-logo .brand-image{max-width:100%;width:155px;height:auto;object-fit:contain}
+ .manager-mode .manager-menu{padding:10px;flex:1 0 auto}
+ .manager-mode .manager-menu button{width:100%;max-width:100%;min-width:0;white-space:normal;overflow-wrap:anywhere;gap:9px}
+ .manager-mode .manager-side-foot{padding:14px 12px calc(14px + env(safe-area-inset-bottom,0px));flex-wrap:wrap}
+ .manager-mode .manager-overlay{position:fixed;inset:0;z-index:99}
+}
