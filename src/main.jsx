@@ -57,7 +57,7 @@ const[checkoutBusy,setCheckoutBusy]=useState(false);
 const[pendingSandboxOrder,setPendingSandboxOrder]=useState(null);
 const[pixPayment,setPixPayment]=useState(null);
 const updateDelivery=(field,value)=>setDelivery(v=>({...v,[field]:value}));
-useEffect(()=>{if(!pixPayment?.orderId)return;let active=true;const poll=async()=>{try{const p=await checkSandboxPayment(pixPayment.orderId);if(!active)return;if(p.status==='PAID'){setPixPayment(v=>v?{...v,status:'PAID'}:v);setSharedOrders(await fetchSharedDemoOrders());setOrderSent(true);setCart({});setPendingSandboxOrder(null);setPage('pedidos')}else if(p.status!=='PENDING'){setPixPayment(v=>v?{...v,status:p.status}:v)}}catch{}};poll();const timer=setInterval(poll,6000);return()=>{active=false;clearInterval(timer)}},[pixPayment?.orderId]);
+useEffect(()=>{if(!pixPayment?.orderId)return;let active=true;const poll=async()=>{try{const p=await checkSandboxPayment(pixPayment.orderId);if(!active)return;if(p.status==='PAID'){setPixPayment(v=>v?{...v,status:'PAID'}:v);setSharedOrders(await fetchSharedDemoOrders());setOrderSent(true);setCart({});setPendingSandboxOrder(null);setPixPayment(null);setCheckoutStep(1);setPage(current=>current==='carrinho'?'pedidos':current)}else if(p.status!=='PENDING'){setPixPayment(v=>v?{...v,status:p.status}:v)}}catch{}};poll();const timer=setInterval(poll,6000);return()=>{active=false;clearInterval(timer)}},[pixPayment?.orderId]);
 
 const[adminTab,setAdminTab]=useState('visao');
 const[showcaseKanban,setShowcaseKanban]=useState(false);
