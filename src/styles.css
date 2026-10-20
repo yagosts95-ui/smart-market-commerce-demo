@@ -628,3 +628,22 @@ img,video,picture{max-width:100%}
 
 /* Horizontal, touch-native flash-offer carousel */
 .flash-offer-items{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-padding-inline:2px;gap:13px;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;padding:4px 2px 13px;scrollbar-width:thin}.flash-offer-mini{flex:0 0 clamp(240px,32%,350px);scroll-snap-align:start;min-width:0;align-content:start}.flash-offer-mini img{object-fit:contain;overflow:hidden;font-size:0;color:transparent;border-radius:9px;background:#f6f8f6}.flash-carousel-info{display:flex;justify-content:space-between;gap:8px;margin:10px 0 2px;color:#846025;font-size:11px;font-weight:700}.flash-carousel-hint{display:none;text-align:center;color:#846025;font-size:12px;font-weight:700;margin-top:2px}@media(max-width:760px){.flash-offer-mini{flex-basis:calc(100% - 14px);min-height:190px}.flash-carousel-info span:last-child{display:none}.flash-carousel-hint{display:block}.flash-offer-mini img{width:76px;height:76px}.flash-offer-items{scroll-snap-stop:always}.flash-alert-card{overflow:hidden}}
+
+/* Customer viewport containment and PWA safe areas */
+html,body,#root{max-width:100%;min-width:0}
+.app:not(.manager-mode){width:100%;max-width:100%;overflow-x:clip}
+.app:not(.manager-mode) main,.app:not(.manager-mode) section,.app:not(.manager-mode) .container{min-width:0;max-width:100%;box-sizing:border-box}
+.app:not(.manager-mode) img{max-width:100%}
+@media(max-width:760px){
+.app:not(.manager-mode){overflow-x:hidden;padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+.app:not(.manager-mode) .container{width:100%;padding-left:14px;padding-right:14px}
+.app:not(.manager-mode) .header-inner{max-width:100%;min-height:0;gap:10px;flex-wrap:wrap}
+.app:not(.manager-mode) .header-search{width:100%;max-width:100%;min-width:0;flex-basis:100%}
+.app:not(.manager-mode) .header-actions{gap:7px;min-width:0}
+.app:not(.manager-mode) .products-grid{min-width:0;width:100%}
+.app:not(.manager-mode) .product-card,.app:not(.manager-mode) .flash-alert-card,.app:not(.manager-mode) .premium-order-card{min-width:0;max-width:100%}
+.app:not(.manager-mode) .mobile-bottom{padding-bottom:env(safe-area-inset-bottom,0px);bottom:0}
+.app:not(.manager-mode) .offer-center-panel{max-width:100vw}
+.app:not(.manager-mode) .flash-offer-items{max-width:100%;min-width:0}
+.app:not(.manager-mode) .detail-modal{max-height:calc(100dvh - 105px)!important}
+}
