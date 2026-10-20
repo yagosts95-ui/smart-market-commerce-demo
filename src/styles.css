@@ -609,3 +609,5 @@ img,video,picture{max-width:100%}
  .checkout-stage.delivery-stage .delivery-form-row{grid-template-columns:1fr}
  .checkout-stage.delivery-stage{padding-bottom:calc(140px + env(safe-area-inset-bottom,0px))}
 }
+
+.manager-contact-access{display:flex;align-items:center;gap:12px;padding:10px 0;flex-wrap:wrap}.manager-contact-access label{display:flex;align-items:center;gap:10px;font-size:11px;font-weight:700;color:#286348}.manager-contact-access input{max-width:220px;border:1px solid #c8e0cf;border-radius:8px;padding:9px;background:#fff}.manager-contact-access span{color:#a33a30;font-size:11px}.manager-contact-button{border:1px solid #b9dfc8;background:#f4fbf6;color:#067541;border-radius:8px;padding:9px;font-size:11px;font-weight:750;cursor:pointer;width:100%;margin:8px 0}.manager-contact-info{display:grid;gap:6px;padding:11px;margin:8px 0;background:#e8f7ed;border-radius:9px;color:#154b32;font-size:11px;overflow-wrap:anywhere}
