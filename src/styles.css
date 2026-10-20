@@ -647,3 +647,28 @@ html,body,#root{max-width:100%;min-width:0}
 .app:not(.manager-mode) .flash-offer-items{max-width:100%;min-width:0}
 .app:not(.manager-mode) .detail-modal{max-height:calc(100dvh - 105px)!important}
 }
+
+/* Gestor: viewport containment, without disabling the Kanban's own scroll */
+.app.manager-mode{width:100%;max-width:100%;min-width:0;overflow-x:clip}
+.manager-shell{width:100%;max-width:100%;min-width:0}
+.manager-shell>div:not(.manager-side),.manager-main,.manager-content,.manager-body{min-width:0;max-width:100%;box-sizing:border-box}
+.manager-body{width:100%}
+.manager-mode .orders-board,.manager-mode .manager-products,.manager-mode .catalog-manage-list,.manager-mode .bi-panel{min-width:0;max-width:100%}
+.manager-mode .kanban-track{width:100%;max-width:100%;min-width:0;overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+.manager-mode .kanban-column{min-width:0}
+.manager-mode img{max-width:100%}
+@media(max-width:760px){
+.manager-shell{display:block;min-height:100dvh}
+.manager-body{padding:16px 13px calc(28px + env(safe-area-inset-bottom,0px));width:100%;overflow-x:clip}
+.manager-mode .manager-welcome,.manager-mode .section-head{flex-wrap:wrap;min-width:0}
+.manager-mode .stats{grid-template-columns:repeat(2,minmax(0,1fr));width:100%}
+.manager-mode .stat{min-width:0;padding:13px}
+.manager-mode .kanban-track{scroll-padding-inline:2px}
+.manager-mode .kanban-column{flex:0 0 min(290px,calc(100vw - 35px))}
+.manager-mode .catalog-manage-row{max-width:100%;min-width:0;flex-wrap:wrap}
+.manager-mode .catalog-tools{min-width:0;max-width:100%;flex-wrap:wrap}
+.manager-mode .catalog-tools input{max-width:100%;min-width:0}
+.manager-mode .manager-contact-access{max-width:100%;flex-wrap:wrap}
+.manager-mode .manager-side{max-width:85vw}
+.manager-mode .bi-panel{overflow-wrap:anywhere}
+}
