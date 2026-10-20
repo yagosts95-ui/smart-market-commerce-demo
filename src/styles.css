@@ -672,3 +672,21 @@ html,body,#root{max-width:100%;min-width:0}
 .manager-mode .manager-side{max-width:85vw}
 .manager-mode .bi-panel{overflow-wrap:anywhere}
 }
+
+/* Surgical fix: the Gestor's STICKY TOP BAR, not the content/Kanban */
+.manager-mode .manager-content{min-width:0;width:100%;max-width:100%}
+.manager-mode .manager-top{box-sizing:border-box;width:100%;max-width:100%;min-width:0;overflow:hidden}
+.manager-mode .manager-top>div{min-width:0;max-width:100%}
+.manager-mode .manager-top .overline{display:block;max-width:100%;white-space:normal;overflow-wrap:anywhere}
+.manager-mode .manager-top h2{overflow-wrap:anywhere}
+.manager-mode .manager-top>.button{flex-shrink:0;max-width:100%}
+@media(max-width:760px){
+ .manager-mode .manager-top{display:grid;grid-template-columns:36px minmax(0,1fr) auto;align-items:center;column-gap:8px;row-gap:4px;min-height:64px;padding:calc(9px + env(safe-area-inset-top,0px)) 12px 9px;top:0}
+ .manager-mode .manager-top .mobile-menu{display:grid;width:36px;height:36px;min-width:0;padding:5px;place-items:center}
+ .manager-mode .manager-top>div{min-width:0;overflow:hidden}
+ .manager-mode .manager-top .overline{font-size:9px;letter-spacing:0;line-height:1.15;white-space:normal}
+ .manager-mode .manager-top h2{font-size:14px;line-height:1.2;margin:3px 0 0;white-space:normal}
+ .manager-mode .manager-top>.button{min-width:0;width:auto;max-width:88px;min-height:34px;display:inline-flex;align-items:center;justify-content:center;gap:4px;padding:6px 7px;font-size:10px;line-height:1.1;white-space:normal;text-align:center}
+ .manager-mode .manager-top>.button svg{width:14px;height:14px;flex-shrink:0}
+}
+@media(max-width:360px){.manager-mode .manager-top{grid-template-columns:32px minmax(0,1fr) 65px;padding-inline:8px;gap:5px}.manager-mode .manager-top>.button{max-width:65px;font-size:9px}.manager-mode .manager-top .overline{font-size:8px}}
