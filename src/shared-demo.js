@@ -81,13 +81,14 @@ const vapidPublic='BP5K2f7hcZFjCWVLApBwhzuCWoCN6uoO022NWQ0cLf9XdHtNAM1vBpFCQ70Db
 function decodeBase64Url(value){const padded=(value+'='.repeat((4-value.length%4)%4)).replace(/-/g,'+').replace(/_/g,'/');return Uint8Array.from(atob(padded),c=>c.charCodeAt(0))}
 export async function getCustomerOfferPushState(){if(!('serviceWorker' in navigator)||!('PushManager' in window)||!('Notification' in window))return 'unsupported';if(Notification.permission==='denied')return 'blocked';if(Notification.permission!=='granted')return 'off';const reg=await navigator.serviceWorker.getRegistration('/');if(!reg)return 'off';const sub=await reg.pushManager.getSubscription();return sub?'active':'off';}
 export async function subscribeCustomerToOffers(){if(!('serviceWorker' in navigator)||!('PushManager' in window)||!('Notification' in window))throw Error('Notificações indisponíveis neste dispositivo');const permission=await Notification.requestPermission();if(permission!=='granted')throw Error('Permissão de notificações não concedida');const registration=await navigator.serviceWorker.register('/demo-push-sw.js');const subscription=await registration.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:decodeBase64Url(vapidPublic)});const r=await fetch(url+'/rest/v1/rpc/register_demo_offer_push',{method:'POST',headers,body:JSON.stringify({p_subscription:subscription.toJSON()})});if(!r.ok)throw Error('Não foi possível ativar avisos de ofertas');return true;}
+export async function getManagerPushState(){if(!('serviceWorker' in navigator)||!('PushManager' in window)||!('Notification' in window))return 'unsupported';if(Notification.permission==='denied')return 'blocked';if(Notification.permission!=='granted')return 'off';const reg=await navigator.serviceWorker.getRegistration('/');if(!reg)return 'off';return (await reg.pushManager.getSubscription())?'active':'off'}
 export async function subscribeManagerToPush(){
  if(!('serviceWorker' in navigator)||!('PushManager' in window)||!('Notification' in window))throw Error('Push indisponível neste navegador');
  const permission=await Notification.requestPermission();
  if(permission!=='granted')throw Error('Permissão de notificação não concedida');
  const registration=await navigator.serviceWorker.register('/demo-push-sw.js');
  const ready=await navigator.serviceWorker.ready;
- const subscription=await ready.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:decodeBase64Url(vapidPublic)});
+ const subscription=await ready.pushManager.getSubscription()||await ready.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:decodeBase64Url(vapidPublic)});
  const r=await fetch(url+'/rest/v1/rpc/register_demo_push',{method:'POST',headers,body:JSON.stringify({p_subscription:subscription.toJSON()})});
  if(!r.ok)throw Error('Não foi possível inscrever o dispositivo');
  return true;
