@@ -79,7 +79,6 @@ const[offerPushStatus,setOfferPushStatus]=useState('off');
 const[offerCenterOpen,setOfferCenterOpen]=useState(false);
 useEffect(()=>{getCustomerOfferPushState().then(setOfferPushStatus).catch(()=>{});const onFocus=()=>getCustomerOfferPushState().then(setOfferPushStatus).catch(()=>{});window.addEventListener('focus',onFocus);return()=>window.removeEventListener('focus',onFocus)},[]);
 const enableOfferAlerts=async()=>{try{await subscribeCustomerToOffers();setOfferNotifyState('Alertas ativados neste aparelho');setOfferPushStatus(await getCustomerOfferPushState())}catch(e){setOfferNotifyState(e.message||'Não foi possível ativar alertas');setOfferPushStatus(await getCustomerOfferPushState().catch(()=>'off'))}};
-const[flashSlide,setFlashSlide]=useState(0);
 const[flashDismissed,setFlashDismissed]=useState(()=>sessionStorage.getItem('mv_flash_dismissed')||'');
 const[offerClock,setOfferClock]=useState(Date.now());
 useEffect(()=>{let active=true;const poll=async()=>{try{const rows=await fetchDemoFlashOffers();if(active){setFlashOffers(rows);setOfferClock(Date.now())}}catch{}};poll();const timer=setInterval(poll,4000);return()=>{active=false;clearInterval(timer)}},[]);
