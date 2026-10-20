@@ -717,3 +717,6 @@ html,body,#root{max-width:100%;min-width:0}
  .manager-mode .manager-side-foot{padding:14px 12px calc(14px + env(safe-area-inset-bottom,0px));flex-wrap:wrap}
  .manager-mode .manager-overlay{position:fixed;inset:0;z-index:99}
 }
+
+/* Gestor top-bar push activation replaces obsolete store link */
+.manager-mode .manager-push-top{display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:normal;line-height:1.15;flex-shrink:0;text-align:center}.manager-mode .manager-push-top.is-active{background:#e4f5eb;color:#087644;border-color:#8bc9a5}.manager-mode .manager-push-top svg{flex:none}@media(max-width:760px){.manager-mode .manager-top{grid-template-columns:36px minmax(0,1fr) minmax(91px,112px)}.manager-mode .manager-push-top{width:100%!important;max-width:112px!important;min-width:0!important;min-height:39px!important;padding:6px!important;font-size:9px!important;gap:4px!important}.manager-mode .manager-push-top svg{width:14px;height:14px}}@media(max-width:360px){.manager-mode .manager-top{grid-template-columns:32px minmax(0,1fr) 91px}.manager-mode .manager-push-top{max-width:91px!important;font-size:8px!important}}
