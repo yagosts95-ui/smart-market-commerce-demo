@@ -720,3 +720,21 @@ html,body,#root{max-width:100%;min-width:0}
 
 /* Gestor top-bar push activation replaces obsolete store link */
 .manager-mode .manager-push-top{display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:normal;line-height:1.15;flex-shrink:0;text-align:center}.manager-mode .manager-push-top.is-active{background:#e4f5eb;color:#087644;border-color:#8bc9a5}.manager-mode .manager-push-top svg{flex:none}@media(max-width:760px){.manager-mode .manager-top{grid-template-columns:36px minmax(0,1fr) minmax(91px,112px)}.manager-mode .manager-push-top{width:100%!important;max-width:112px!important;min-width:0!important;min-height:39px!important;padding:6px!important;font-size:9px!important;gap:4px!important}.manager-mode .manager-push-top svg{width:14px;height:14px}}@media(max-width:360px){.manager-mode .manager-top{grid-template-columns:32px minmax(0,1fr) 91px}.manager-mode .manager-push-top{max-width:91px!important;font-size:8px!important}}
+
+
+/* Automatic print workflow — demo simulation, ready for a future local printer bridge */
+.auto-print-panel{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin:0 0 18px;padding:18px 20px;border:1px solid #dce9e0;border-radius:14px;background:#fff;box-shadow:0 4px 14px #163b2407;min-width:0}
+.auto-print-main{flex:1;min-width:0}
+.auto-print-heading{display:flex;align-items:center;gap:9px;color:#174d35;flex-wrap:wrap}
+.auto-print-heading svg{color:#07894d;flex-shrink:0}
+.auto-print-heading strong{font:800 15px Montserrat,sans-serif}
+.auto-print-badge{display:inline-flex;align-items:center;border-radius:20px;padding:4px 9px;background:#eef2ef;color:#68776d;font-size:10px;font-weight:800}
+.auto-print-badge.is-on{background:#e0f5e8;color:#087441}
+.auto-print-panel p{margin:10px 0 8px;color:#63766a;font-size:12px;line-height:1.6;max-width:850px}
+.auto-print-panel small[role=status]{display:block;color:#426552;font-size:11px;line-height:1.5}
+.auto-print-switch{display:inline-flex;align-items:center;gap:9px;flex-shrink:0;border:1px solid #b9dfc7;border-radius:10px;padding:12px 14px;background:#f0faf3;color:#14623e;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap}
+.auto-print-switch input{width:17px;height:17px;accent-color:#078b4e}
+.auto-print-last{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:12px;padding-top:11px;border-top:1px solid #e9efeb;color:#436452;font-size:11px}
+.auto-print-last button,.auto-print-retry{display:inline-flex;align-items:center;justify-content:center;border:1px solid #b8ddc6;border-radius:8px;padding:9px 11px;background:#f4fbf6;color:#087441;font-size:11px;font-weight:800}
+.auto-print-retry{margin-top:9px}
+@media(max-width:760px){.auto-print-panel{flex-direction:column;gap:13px;padding:14px}.auto-print-switch{width:100%;justify-content:flex-start;white-space:normal}.auto-print-last{align-items:flex-start;flex-direction:column}.auto-print-last button{width:100%}}
