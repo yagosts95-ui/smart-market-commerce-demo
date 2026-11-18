@@ -21,7 +21,7 @@ function aggregate(list,products){
  return {top:[...map.values()].sort((a,b)=>b.value-a.value).slice(0,5),categories:[...categories].sort((a,b)=>b[1]-a[1])};
 }
 export default function CommercialReports({orders=[],products=[]}){
- const [mode,setMode]=useState('cenario'),[period,setPeriod]=useState('30d'),[comparison,setComparison]=useState('semana'),[ordersExtra,setOrdersExtra]=useState(40),[ticketLift,setTicketLift]=useState(15),[reference,setReference]=useState(277778),[fee,setFee]=useState(12);
+ const [mode,setMode]=useState('cenario'),[period,setPeriod]=useState('30d'),[comparison,setComparison]=useState('semana'),[ordersExtra,setOrdersExtra]=useState(40),[ticketLift,setTicketLift]=useState(15),[reference,setReference]=useState(277778);
  const now=new Date(),all=useMemo(()=>mode==='cenario'?sampleOrders(products):orders,[mode,orders,products]);
  const start=periodStart(now,period),end=addDays(day(now),1),days=Math.max(1,Math.ceil((end-start)/86400000));
  const chosen=all.filter(o=>{const d=getDate(o);return d&&d>=start&&d<end}),preceding=all.filter(o=>{const d=getDate(o);return d&&d>=addDays(start,-days)&&d<start});
